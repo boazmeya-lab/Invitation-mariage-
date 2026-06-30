@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Site Enveloppe</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #f2ebd9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Conteneur principal de l'enveloppe */
+        .enveloppe-wrapper {
+            position: relative;
+            cursor: pointer;
+            transform: scale(1.2); /* Grossit un peu l'enveloppe */
+            transition: transform 0.3s ease;
+        }
+
+        .enveloppe-wrapper:hover {
+            transform: scale(1.25);
+        }
+
+        .enveloppe {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background-color: #f08080;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 2;
+        }
+
+        /* Le rabat de l'enveloppe (le haut triangle) */
+        .enveloppe::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            z-index: 4;
+            border-top: 110px solid #de6b6b;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            transform-origin: top;
+            transition: transform 0.4s ease-in-out;
+        }
+
+        /* Les côtés de l'enveloppe */
+        .enveloppe::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-bottom: 100px solid #e67373;
+            border-left: 150px solid #e67373;
+            border-right: 150px solid #e67373;
+            border-top: 100px solid transparent;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+            z-index: 3;
+        }
+
+        /* La lettre cachée dedans */
+        .lettre {
+            position: absolute;
+            bottom: 10px;
+            left: 15px;
+            width: 270px;
+            height: 180px;
+            background: #fff;
+            border-radius: 4px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.6s ease-in-out, z-index 0.6s, width 0.6s, height 0.6s, left 0.6s, top 0.6s;
+            z-index: 1;
+        }
+
+        .lettre h1 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .lettre p {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        /* Bouton ou lien à l'intérieur de la lettre */
+        .bouton-site {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #f08080;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .bouton-site:hover {
+            background-color: #de6b6b;
+        }
+
+        /* --- ÉTATS QUAND L'ENVELOPPE EST OUVERTE (Via JavaScript) --- */
+
+        /* 1. Le rabat s'ouvre vers le haut */
+        .enveloppe-wrapper.open .enveloppe::before {
+            transform: rotateX(180deg);
+            z-index: 1; /* Passe derrière pour laisser sortir la lettre */
+            border-top-color: #f08080;
+        }
+
+        /* 2. La lettre sort et grandit */
+        .enveloppe-wrapper.open .lettre {
+            transform: translateY(-120px);
+            z-index: 5; /* Passe tout devant */
+            height: 220px; /* Devient un peu plus grande pour afficher le contenu */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Conteneur qui écoute le clic -->
+    <div class="enveloppe-wrapper" id="monEnveloppe">
+        <div class="enveloppe"></div>
+        <div class="lettre">
+            <h1>Surprise ! ✨</h1>
+            <p>Bienvenue sur mon site web. Clique sur le bouton ci-dessous pour découvrir la suite.</p>
+            <!-- Ton lien vers le vrai site ici -->
+            <a href="https://www.google.com" target="_blank" class="bouton-site">Visiter le site</a>
+        </div>
+    </div>
+
+    <!-- Elément Audio masqué pour la musique -->
+    <!-- Remplace "ma-musique.mp3" par le lien ou le nom de ta chanson -->
+    <audio id="maMusique" src="ma-musique.mp3" preload="auto"></audio>
+
+    <script>
+        const enveloppe = document.getElementById('monEnveloppe');
+        const musique = document.getElementById('maMusique');
+
+        enveloppe.addEventListener('click', () => {
+            // Ajoute ou enlève la classe 'open' au clic
+            enveloppe.classList.toggle('open');
+            
+            // Si l'enveloppe est ouverte, on joue la musique, sinon on met pause
+            if (enveloppe.classList.contains('open')) {
+                musique.play().catch(error => {
+                    console.log("Lecture audio bloquée par le navigateur :", error);
+                });
+            } else {
+                musique.pause();
+                musique.currentTime = 0; // Remet la chanson au début si on referme
+            }
+        });
+    </script>
+
+</body>
+</html>
