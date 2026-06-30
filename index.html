@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invitation Mariage - Ellie & Henry</title>
+    <title>Invitation Mariage Premium</title>
+    <!-- Chargement d'icônes pour le GPS et le panier -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             box-sizing: border-box;
@@ -21,11 +23,10 @@
             overflow: hidden;
         }
 
-        /* Conteneur principal plein écran sur mobile */
         .screen-container {
             position: relative;
             width: 100%;
-            max-width: 450px; /* Taille d'un écran de téléphone */
+            max-width: 450px;
             height: 100vh;
             max-height: 850px;
             background-color: #e3ded5;
@@ -46,33 +47,30 @@
             transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
         }
 
-        /* Le corps vert texturé de l'enveloppe */
         .enveloppe-corps {
             position: absolute;
             bottom: 0;
             width: 100%;
             height: 80%;
-            background-color: #2c4c38; /* Vert sapin chic comme sur l'image */
+            background-color: #2c4c38;
             border-radius: 0 0 12px 12px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             z-index: 3;
         }
 
-        /* Le rabat (triangle du haut) */
         .enveloppe-rabat {
             position: absolute;
             top: 20%;
             left: 0;
             width: 100%;
             height: 45%;
-            background-color: #223b2c; /* Vert un peu plus sombre */
-            clip-path: polygon(0 0, 50% 100%, 100% 0); /* Crée la forme triangle */
+            background-color: #223b2c;
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
             transform-origin: top;
             transition: transform 0.6s ease-in-out;
             z-index: 5;
         }
 
-        /* Le sceau de cire doré au milieu */
         .sceau-or {
             position: absolute;
             top: 55%;
@@ -96,104 +94,226 @@
             content: "♥";
             font-size: 24px;
             color: #fff;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
         }
 
-        .sceau-or:hover {
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-
-        /* --- LA LETTRE / FAIRE-PART --- */
+        /* --- CARTE D'INVITATION (CONTENU SCROLLABLE) --- */
         .carte-invitation {
             position: absolute;
-            bottom: 5%;
-            left: 5%;
-            width: 90%;
-            height: 90%;
+            bottom: 2%;
+            left: 4%;
+            width: 92%;
+            height: 96%;
             background-color: #ffffff;
-            border-radius: 8px;
-            padding: 25px 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             z-index: 1;
             transform: translateY(0);
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.4s;
-            overflow-y: auto; /* Permet de scroller sur la lettre si le texte est long */
+            overflow-y: auto; /* Permet le défilement fluide */
+            scrollbar-width: none; /* Cache la barre de défilement sur Firefox */
+        }
+
+        .carte-invitation::-webkit-scrollbar {
+            display: none; /* Cache la barre de défilement sur Chrome/Safari */
+        }
+
+        /* Conteneur Photo géante */
+        .photo-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+        }
+
+        .couple-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        /* Noms superposés sur la photo */
+        .noms-maried {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 40px 20px 20px 20px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
             text-align: center;
         }
 
-        /* Image du couple */
-        .couple-photo {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            border: 1px solid #dfdcd4;
+        .noms-maried h1 {
+            font-family: 'Times New Roman', serif;
+            font-size: 34px;
+            font-weight: normal;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
         }
 
-        .carte-invitation h2 {
-            font-size: 14px;
+        /* Sections de texte */
+        .contenu-texte {
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: #8c765c;
             margin-bottom: 10px;
         }
 
-        .carte-invitation h1 {
-            font-family: 'Times New Roman', serif;
-            font-size: 32px;
-            color: #2c4c38;
-            margin-bottom: 15px;
-            font-weight: normal;
-        }
-
-        .carte-invitation .details {
+        .details {
             font-size: 15px;
             line-height: 1.6;
             color: #555;
             margin-bottom: 25px;
         }
 
-        .btn-action {
-            display: inline-block;
-            padding: 12px 25px;
+        /* --- COMPTE À REBOURS (CHRONO) --- */
+        .countdown-section {
+            margin: 20px 0;
+            background: #fdfbf7;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #eae5da;
+        }
+
+        .countdown-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #8c765c;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .timer-container {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .time-box {
+            text-align: center;
+        }
+
+        .time-box span {
+            display: block;
+            font-size: 22px;
+            font-weight: bold;
+            color: #2c4c38;
+        }
+
+        .time-box label {
+            font-size: 10px;
+            color: #777;
+            text-transform: uppercase;
+        }
+
+        /* --- BOUTON GPS --- */
+        .btn-gps {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px;
+            background-color: #faf7f2;
+            color: #2c4c38;
+            border: 1px solid #2c4c38;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+
+        .btn-gps:hover {
             background-color: #2c4c38;
             color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 14px;
+        }
+
+        /* --- GALERIE HISTOIRE --- */
+        .galerie-section {
+            text-align: left;
+            margin-bottom: 35px;
+        }
+
+        .galerie-section h3 {
+            font-size: 16px;
+            color: #2c4c38;
+            margin-bottom: 15px;
+            text-align: center;
+            text-transform: uppercase;
             letter-spacing: 1px;
-            transition: background 0.3s;
         }
 
-        .btn-action:hover {
-            background-color: #1e3527;
+        .grid-galerie {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
         }
 
-        /* --- ANIMATIONS DE L'OUVERTURE --- */
-        
-        /* 1. Le rabat tourne vers le haut */
+        .grid-galerie img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        /* --- SEPARATEUR --- */
+        hr {
+            border: 0;
+            height: 1px;
+            background: #eae5da;
+            margin: 30px 0;
+        }
+
+        /* --- BOUTON COMMANDER LE SITE (WHATSAPP) --- */
+        .btn-commander {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px;
+            background-color: #25D366; /* Couleur officielle WhatsApp */
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .btn-commander:hover {
+            transform: scale(1.02);
+            background-color: #20ba56;
+        }
+
+        /* --- CLASSES D'OUVERTURE --- */
         .screen-container.open .enveloppe-rabat {
             transform: rotateX(180deg);
             z-index: 2;
         }
 
-        /* 2. Le sceau disparaît doucement */
         .screen-container.open .sceau-or {
             opacity: 0;
             pointer-events: none;
         }
 
-        /* 3. La lettre sort magnifiquement vers le haut et se place devant */
         .screen-container.open .carte-invitation {
-            transform: translateY(-8%);
+            transform: translateY(-2%);
             z-index: 12;
-            height: 95%;
         }
 
-        /* 4. Légère descente de l'enveloppe vide pour laisser place au texte */
         .screen-container.open .enveloppe-wrapper {
-            transform: translateY(15px);
+            transform: translateY(20px);
+            opacity: 0.2; /* Estompe légèrement l'enveloppe en arrière-plan */
+            pointer-events: none;
         }
     </style>
 </head>
@@ -201,30 +321,75 @@
 
     <div class="screen-container" id="mainContainer">
         
-        <!-- L'enveloppe qui contient tout -->
+        <!-- Enveloppe d'entrée -->
         <div class="enveloppe-wrapper">
             <div class="enveloppe-rabat"></div>
             <div class="enveloppe-corps"></div>
-            <!-- Le bouton d'ouverture (Sceau d'or) -->
             <div class="sceau-or" id="boutonOuvrir"></div>
         </div>
 
-        <!-- Le Faire-Part caché (avec la photo et les infos) -->
+        <!-- Le Faire-part complet téléchargeable -->
         <div class="carte-invitation">
-            <!-- REMPLACE CETTE IMAGE PAR LA PHOTO DU COUPLE -->
-            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600" alt="Couple" class="couple-photo">
             
-            <h2>Save The Date</h2>
-            <h1>Ellie & Henry</h1>
-            
-            <p class="details">
-                Ont la joie de vous faire part de leur mariage.<br><br>
-                <strong>Vendredi 10 Mai 2030 à 16h00</strong><br>
-                123 Rue de l'Amour, Paris
-            </p>
-            
-            <!-- Deuxième bouton / Lien vers le site ou formulaire RSVP -->
-            <a href="https://www.google.com" target="_blank" class="btn-action">Confirmer ma présence</a>
+            <!-- Zone Photo Géante avec noms par-dessus -->
+            <div class="photo-container">
+                <!-- Photo principale du couple (modifiable) -->
+                <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600" alt="Couple" class="couple-photo">
+                <div class="noms-maried">
+                    <h1>Ellie & Henry</h1>
+                </div>
+            </div>
+
+            <!-- Contenu textuel et options -->
+            <div class="contenu-texte">
+                <p class="subtitle">Save The Date</p>
+                <p class="details">
+                    Ont l'immense joie de vous inviter à la célébration de leur union sacrée.
+                </p>
+
+                <!-- COMPTE À REBOURS -->
+                <div class="countdown-section">
+                    <p class="countdown-title">Le grand jour dans :</p>
+                    <div class="timer-container">
+                        <div class="time-box"><span id="days">00</span><label>Jours</label></div>
+                        <div class="time-box"><span id="hours">00</span><label>Heures</label></div>
+                        <div class="time-box"><span id="minutes">00</span><label>Min</label></div>
+                        <div class="time-box"><span id="seconds">00</span><label>Sec</label></div>
+                    </div>
+                </div>
+
+                <p class="details" style="margin-top: 20px;">
+                    <strong>Vendredi 10 Mai 2030 à 16h00</strong><br>
+                    Château de la Romance, Domaine de Paris
+                </p>
+
+                <!-- BOUTON GPS -->
+                <!-- Remplace l'URL Google Maps par le vrai lieu si besoin -->
+                <a href="https://maps.google.com" target="_blank" class="btn-gps">
+                    <i class="fa-solid fa-location-dot"></i> Voir le lieu sur le GPS
+                </a>
+
+                <!-- SÉCTION GALERIE / NOTRE HISTOIRE -->
+                <div class="galerie-section">
+                    <h3>Notre Histoire en Images</h3>
+                    <div class="grid-galerie">
+                        <!-- Remplacer les liens d'images ci-dessous par d'autres photos du couple -->
+                        <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=300" alt="Moment 1">
+                        <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=300" alt="Moment 2">
+                        <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=300" alt="Moment 3">
+                        <img src="https://images.unsplash.com/photo-1532712938310-34cb3982ef74?q=80&w=300" alt="Moment 4">
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- BOUTON COMMANDER SUR WHATSAPP -->
+                <!-- Change le numéro 243000000000 par ton vrai numéro (avec l'indicatif pays sans le +) -->
+                <a href="https://wa.me/243000000000?text=Bonjour,%20je%20souhaite%20commander%20un%20site%20d'invitation%20de%20mariage%20pareil." target="_blank" class="btn-commander">
+                    <i class="fa-solid fa-cart-shopping"></i> Commander le même site 🛒
+                </a>
+            </div>
+
         </div>
 
     </div>
@@ -237,15 +402,37 @@
         const bouton = document.getElementById('boutonOuvrir');
         const musique = document.getElementById('maMusique');
 
-        // On ouvre l'enveloppe en cliquant sur le sceau d'or
+        // Événement d'ouverture
         bouton.addEventListener('click', () => {
             container.classList.add('open');
-            
-            // Lancement de la chanson
-            musique.play().catch(error => {
-                console.log("Lecture audio bloquée ou fichier manquant:", error);
-            });
+            musique.play().catch(e => console.log("Audio prêt"));
         });
+
+        // COMPTE À REBOURS SCRIPT
+        // Tu peux changer la date cible ici : (Année, Mois-1, Jour, Heure, Minutes)
+        // Attention : Janvier = 0, Février = 1 ... Mai = 4
+        const dateMariage = new Date(2030, 4, 10, 16, 0, 0).getTime();
+
+        const updateCountdown = () => {
+            const maintenant = new Date().getTime();
+            const difference = dateMariage - maintenant;
+
+            if (difference > 0) {
+                const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById('days').innerText = d < 10 ? '0' + d : d;
+                document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
+                document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
+                document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
+            }
+        };
+
+        // Met à jour le chrono toutes les secondes
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
     </script>
 
 </body>
