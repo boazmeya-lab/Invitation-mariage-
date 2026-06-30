@@ -3,185 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invitation Mariage</title>
+    <title>Invitation Mariage - Ellie & Henry</title>
     <style>
-        /* Réinitialisation de base */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        /* Centre tout au milieu de l'écran */
         body {
-            background-color: #f2ebd9;
+            background-color: #f4f1ea;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Georgia', serif;
             overflow: hidden;
         }
 
-        /* Zone cliquable de taille fixe pour éviter que ça bave partout */
-        .enveloppe-wrapper {
+        /* Conteneur principal plein écran sur mobile */
+        .screen-container {
             position: relative;
-            width: 300px;
-            height: 200px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .enveloppe-wrapper:hover {
-            transform: scale(1.05);
-        }
-
-        /* Le fond/corps de l'enveloppe */
-        .enveloppe {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            background-color: #f08080;
-            border-bottom-left-radius: 6px;
-            border-bottom-right-radius: 6px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            z-index: 2;
+            max-width: 450px; /* Taille d'un écran de téléphone */
+            height: 100vh;
+            max-height: 850px;
+            background-color: #e3ded5;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Le rabat supérieur (le triangle du haut) */
-        .enveloppe::before {
-            content: "";
+        /* --- ENVELOPPE --- */
+        .enveloppe-wrapper {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            z-index: 4;
-            border-top: 110px solid #de6b6b;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            transform-origin: top;
-            transition: transform 0.4s ease-in-out;
+            width: 90%;
+            height: 70%;
+            perspective: 1000px;
+            z-index: 10;
+            transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
         }
 
-        /* Les triangles des côtés et du bas */
-        .enveloppe::after {
-            content: "";
+        /* Le corps vert texturé de l'enveloppe */
+        .enveloppe-corps {
             position: absolute;
             bottom: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-bottom: 100px solid #e67373;
-            border-left: 150px solid #e67373;
-            border-right: 150px solid #e67373;
-            border-top: 100px solid transparent;
-            border-bottom-left-radius: 6px;
-            border-bottom-right-radius: 6px;
+            width: 100%;
+            height: 80%;
+            background-color: #2c4c38; /* Vert sapin chic comme sur l'image */
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             z-index: 3;
         }
 
-        /* La lettre cachée à l'intérieur */
-        .lettre {
+        /* Le rabat (triangle du haut) */
+        .enveloppe-rabat {
             position: absolute;
-            bottom: 10px;
-            left: 15px;
-            width: 270px;
-            height: 180px;
-            background: #ffffff;
-            border-radius: 4px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.6s ease-in-out, z-index 0.6s, height 0.6s;
-            z-index: 1;
+            top: 20%;
+            left: 0;
+            width: 100%;
+            height: 45%;
+            background-color: #223b2c; /* Vert un peu plus sombre */
+            clip-path: polygon(0 0, 50% 100%, 100% 0); /* Crée la forme triangle */
+            transform-origin: top;
+            transition: transform 0.6s ease-in-out;
+            z-index: 5;
         }
 
-        .lettre h1 {
-            font-size: 20px;
-            color: #333;
+        /* Le sceau de cire doré au milieu */
+        .sceau-or {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 65px;
+            height: 65px;
+            background: radial-gradient(circle, #f9d976 0%, #e9b646 60%, #b8860b 100%);
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 0 8px #8b6508;
+            border: 2px dashed #ffdf7a;
+            cursor: pointer;
+            z-index: 6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s ease, opacity 0.4s ease;
+        }
+
+        .sceau-or::after {
+            content: "♥";
+            font-size: 24px;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+        }
+
+        .sceau-or:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        /* --- LA LETTRE / FAIRE-PART --- */
+        .carte-invitation {
+            position: absolute;
+            bottom: 5%;
+            left: 5%;
+            width: 90%;
+            height: 90%;
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 25px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            z-index: 1;
+            transform: translateY(0);
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.4s;
+            overflow-y: auto; /* Permet de scroller sur la lettre si le texte est long */
+            text-align: center;
+        }
+
+        /* Image du couple */
+        .couple-photo {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #dfdcd4;
+        }
+
+        .carte-invitation h2 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #8c765c;
             margin-bottom: 10px;
         }
 
-        .lettre p {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.5;
+        .carte-invitation h1 {
+            font-family: 'Times New Roman', serif;
+            font-size: 32px;
+            color: #2c4c38;
             margin-bottom: 15px;
+            font-weight: normal;
         }
 
-        /* Le bouton pour visiter le site */
-        .bouton-site {
+        .carte-invitation .details {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .btn-action {
             display: inline-block;
-            padding: 8px 16px;
-            background-color: #f08080;
+            padding: 12px 25px;
+            background-color: #2c4c38;
             color: white;
             text-decoration: none;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            transition: background 0.2s;
+            border-radius: 4px;
+            font-size: 14px;
+            letter-spacing: 1px;
+            transition: background 0.3s;
         }
 
-        .bouton-site:hover {
-            background-color: #de6b6b;
+        .btn-action:hover {
+            background-color: #1e3527;
         }
 
-        /* -----------------------------------------------
-           ANIMATIONS LORSQUE L'ENVELOPPE EST OUVERTE
-        -------------------------------------------------- */
-
-        /* Le rabat se lève vers le haut (180 degrés) */
-        .enveloppe-wrapper.open .enveloppe::before {
+        /* --- ANIMATIONS DE L'OUVERTURE --- */
+        
+        /* 1. Le rabat tourne vers le haut */
+        .screen-container.open .enveloppe-rabat {
             transform: rotateX(180deg);
-            z-index: 1; /* Repasse derrière la lettre */
-            border-top-color: #f08080;
+            z-index: 2;
         }
 
-        /* La lettre sort vers le haut et grandit un peu */
-        .enveloppe-wrapper.open .lettre {
-            transform: translateY(-130px);
-            z-index: 5; /* Passe devant tout le monde */
-            height: 220px;
+        /* 2. Le sceau disparaît doucement */
+        .screen-container.open .sceau-or {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* 3. La lettre sort magnifiquement vers le haut et se place devant */
+        .screen-container.open .carte-invitation {
+            transform: translateY(-8%);
+            z-index: 12;
+            height: 95%;
+        }
+
+        /* 4. Légère descente de l'enveloppe vide pour laisser place au texte */
+        .screen-container.open .enveloppe-wrapper {
+            transform: translateY(15px);
         }
     </style>
 </head>
 <body>
 
-    <!-- Structure HTML de l'enveloppe -->
-    <div class="enveloppe-wrapper" id="monEnveloppe">
-        <div class="enveloppe"></div>
-        <div class="lettre">
-            <h1>Invitation</h1>
-            <p>Découvrez nos invitations de mariage en cliquant sur le bouton ci-dessous !</p>
-            <!-- Remplace l'adresse ci-dessous par le lien de ton choix si besoin -->
-            <a href="https://www.google.com" target="_blank" class="bouton-site">Découvrir</a>
+    <div class="screen-container" id="mainContainer">
+        
+        <!-- L'enveloppe qui contient tout -->
+        <div class="enveloppe-wrapper">
+            <div class="enveloppe-rabat"></div>
+            <div class="enveloppe-corps"></div>
+            <!-- Le bouton d'ouverture (Sceau d'or) -->
+            <div class="sceau-or" id="boutonOuvrir"></div>
         </div>
+
+        <!-- Le Faire-Part caché (avec la photo et les infos) -->
+        <div class="carte-invitation">
+            <!-- REMPLACE CETTE IMAGE PAR LA PHOTO DU COUPLE -->
+            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600" alt="Couple" class="couple-photo">
+            
+            <h2>Save The Date</h2>
+            <h1>Ellie & Henry</h1>
+            
+            <p class="details">
+                Ont la joie de vous faire part de leur mariage.<br><br>
+                <strong>Vendredi 10 Mai 2030 à 16h00</strong><br>
+                123 Rue de l'Amour, Paris
+            </p>
+            
+            <!-- Deuxième bouton / Lien vers le site ou formulaire RSVP -->
+            <a href="https://www.google.com" target="_blank" class="btn-action">Confirmer ma présence</a>
+        </div>
+
     </div>
 
-    <!-- Elément Audio masqué pour ta musique -->
-    <!-- Remplace "musique.mp3" par ton fichier audio réel plus tard -->
-    <audio id="maMusique" src="musique.mp3" preload="auto"></audio>
+    <!-- Musique de fond -->
+    <audio id="maMusique" src="musique.mp3" preload="auto" loop></audio>
 
     <script>
-        const enveloppe = document.getElementById('monEnveloppe');
+        const container = document.getElementById('mainContainer');
+        const bouton = document.getElementById('boutonOuvrir');
         const musique = document.getElementById('maMusique');
 
-        enveloppe.addEventListener('click', () => {
-            // Ajoute ou retire la classe 'open' au clic pour déclencher l'animation CSS
-            enveloppe.classList.toggle('open');
+        // On ouvre l'enveloppe en cliquant sur le sceau d'or
+        bouton.addEventListener('click', () => {
+            container.classList.add('open');
             
-            // Gestion de la musique au clic
-            if (enveloppe.classList.contains('open')) {
-                musique.play().catch(error => {
-                    console.log("Lecture audio bloquée ou fichier manquant :", error);
-                });
-            } else {
-                musique.pause();
-                musique.currentTime = 0; // Réinitialise la musique au début
-            }
+            // Lancement de la chanson
+            musique.play().catch(error => {
+                console.log("Lecture audio bloquée ou fichier manquant:", error);
+            });
         });
     </script>
 
