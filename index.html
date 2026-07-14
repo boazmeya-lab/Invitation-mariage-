@@ -44,7 +44,7 @@
         #intro-video {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Permet de remplir l'écran du téléphone proprement */
+            object-fit: cover;
         }
 
         /* Bouton "Ouvrir" temporaire par-dessus la vidéo au début */
@@ -60,7 +60,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             text-transform: uppercase;
             letter-spacing: 1px;
-            pointer-events: none; /* Laisse le clic traverser vers le conteneur */
+            pointer-events: none;
             animation: pulse 2s infinite;
         }
 
@@ -94,12 +94,13 @@
             transform: translateY(0);
         }
 
+        /* Style de la carte faire-part modernisé */
         .card {
             background: white;
-            padding: 40px 30px;
-            border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-            border: 1px solid #f4eae1;
+            padding: 45px 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(127, 85, 57, 0.08);
+            border: 1px solid #e5d3b3; /* Jolie bordure dorée très fine */
         }
 
         h1 {
@@ -115,19 +116,47 @@
             font-style: italic;
             font-size: 1.2rem;
             color: #a5a58d;
-            margin-bottom: 30px;
+        }
+
+        /* Petite ligne déco dorée */
+        .divider {
+            width: 50px;
+            height: 1.5px;
+            background: #e5989b;
+            margin: 25px auto;
         }
 
         .details {
             font-size: 1rem;
             line-height: 1.8;
             color: #6b705c;
-            margin-bottom: 40px;
+            margin-bottom: 25px;
+        }
+
+        /* Style bouton GPS élégant */
+        .btn-location {
+            display: inline-block;
+            background: transparent;
+            color: #7f5539;
+            border: 1px solid #7f5539;
+            text-decoration: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .btn-location:hover {
+            background: #7f5539;
+            color: white;
         }
 
         /* Compte à rebours */
         .countdown-container {
-            margin: 40px 0;
+            margin: 35px 0;
         }
 
         .countdown-title {
@@ -180,7 +209,7 @@
             text-transform: uppercase;
             transition: all 0.3s ease;
             box-shadow: 0 10px 20px rgba(183, 183, 164, 0.3);
-            margin-top: 20px;
+            margin-top: 15px;
             border: none;
             cursor: pointer;
         }
@@ -215,7 +244,6 @@
     <!-- INTRO VIDÉO DE L'ENVELOPPE -->
     <div id="intro-container" onclick="startExperience()">
         <div id="open-overlay">Ouvrir l'invitation</div>
-        <!-- La vidéo affiche le premier plan sans boucler au départ -->
         <video id="intro-video" playsinline muted>
             <source src="ouverture.mp4" type="video/mp4">
         </video>
@@ -227,10 +255,18 @@
             <h1>S & C</h1>
             <p class="subtitle">Se disent Oui</p>
             
+            <div class="divider"></div>
+
             <p class="details">
                 Nous sommes heureux de vous inviter à célébrer notre union.<br>
-                Rejoignez-nous pour partager ce moment magique et inoubliable.
+                Rejoignez-nous pour partager ce moment magique.<br><br>
+                <strong>Lieu :</strong> Nom de la Salle / Église, Ville
             </p>
+
+            <!-- BOUTON GPS (Mets ton lien Google Maps ici !) -->
+            <a href="https://maps.app.goo.gl/TON_LIEN_GOOGLE_MAPS" target="_blank" class="btn-location">
+                📍 Voir l'itinéraire
+            </a>
 
             <!-- COMPTE À REBOURS -->
             <div class="countdown-container">
@@ -269,18 +305,14 @@
         const music = document.getElementById('music');
 
         function startExperience() {
-            // 1. Masquer le bouton "Ouvrir"
             overlay.style.display = 'none';
 
-            // 2. Lancer la musique directement
             music.play().then(() => {
                 document.getElementById('music-control').style.display = 'flex';
             }).catch(err => console.log("Musique bloquée au départ :", err));
 
-            // 3. Jouer la vidéo de l'enveloppe
             video.play();
 
-            // 4. Dès que la vidéo de l'enveloppe est finie, on affiche le faire-part
             video.onended = function() {
                 document.body.classList.add('intro-hidden');
             };
@@ -314,4 +346,5 @@
         }, 1000);
     </script>
 </body>
-</html>
+                    </html>
+    
