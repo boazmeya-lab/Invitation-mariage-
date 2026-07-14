@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -58,7 +57,7 @@
             border: 2px solid #ddb892;
         }
 
-        /* Lignes de l'enveloppe pour l'effet réaliste */
+        /* Effet de pliure réaliste */
         .envelope::before {
             content: '';
             position: absolute;
@@ -72,7 +71,7 @@
             pointer-events: none;
         }
 
-        /* Cachet de cire interactif */
+        /* Cachet de cire */
         #seal {
             width: 90px;
             height: 90px;
@@ -107,14 +106,14 @@
             font-size: 1.1rem;
         }
 
-        /* État quand l'enveloppe s'ouvre */
+        /* Animation d'ouverture */
         .opened #envelope-container {
             transform: translateY(-100%);
             opacity: 0;
             pointer-events: none;
         }
 
-        /* Page de l'invitation (Faire-part) */
+        /* Conteneur de l'invitation */
         #card-container {
             opacity: 0;
             transform: translateY(40px);
@@ -163,7 +162,7 @@
             margin-bottom: 40px;
         }
 
-        /* Style du Compte à rebours */
+        /* Compte à rebours */
         .countdown-container {
             margin: 40px 0;
         }
@@ -204,7 +203,7 @@
             letter-spacing: 1px;
         }
 
-        /* Bouton de confirmation Tally */
+        /* Bouton RSVP Tally */
         .btn-rsvp {
             display: inline-block;
             background: #b7b7a4;
@@ -229,7 +228,7 @@
             box-shadow: 0 12px 24px rgba(183, 183, 164, 0.4);
         }
 
-        /* Bouton Audio discret */
+        /* Contrôle audio discret */
         #music-control {
             position: fixed;
             bottom: 20px;
@@ -250,7 +249,7 @@
 </head>
 <body>
 
-    <!-- ÉCRAN DE L'ENVELOPPE PLEIN ÉCRAN -->
+    <!-- L'ENVELOPPE GÉANTE -->
     <div id="envelope-container" onclick="openInvitation()">
         <div class="envelope">
             <div id="seal">S & C</div>
@@ -258,7 +257,7 @@
         </div>
     </div>
 
-    <!-- PAGE DU FAIRE-PART -->
+    <!-- LE FAIRE-PART DE MARIAGE -->
     <div id="card-container">
         <div class="card">
             <h1>S & C</h1>
@@ -292,37 +291,35 @@
                 </div>
             </div>
 
-            <!-- BOUTON RSVP (LIEN TALLY) -->
-            <!-- REMPLACE L'URL CI-DESSOUS PAR TON LIEN TALLY PERSONNEL -->
-            <a href="https://tally.so/r/votre-lien-tally" target="_blank" class="btn-rsvp">
+            <!-- BOUTON RSVP (Remplacer l'URL par ton lien Tally) -->
+            <a href="https://tally.so/r/ton-propre-lien" target="_blank" class="btn-rsvp">
                 Confirmer ma présence
             </a>
         </div>
     </div>
 
-    <!-- LECTEUR AUDIO DISCRET -->
+    <!-- MUSIQUE (Pointe vers ton fichier audio sur GitHub) -->
     <audio id="music" loop>
         <source src="Ed Sheeran - Perfect (Official Music Video).mp3" type="audio/mpeg">
     </audio>
 
-    <!-- BOUTON PLAY/PAUSE DISCRET -->
+    <!-- BOUTON D'AUDIO FLOTTANT -->
     <div id="music-control" style="display: none;" onclick="toggleMusic()">
         🎵
     </div>
 
     <script>
-        // Date cible du mariage pour le compte à rebours (À MODIFIER ICI)
-        // Format : Année, Mois (0 pour Janvier, 11 pour Décembre), Jour, Heure, Minute
+        // --- CONFIGURATION DE LA DATE (Année, Mois-1, Jour, Heure, Minute) ---
+        // Note importante : Les mois commencent à 0 (0 = Janvier, 5 = Juin, 11 = Décembre)
         const weddingDate = new Date(2027, 5, 20, 15, 0, 0).getTime(); 
 
         function openInvitation() {
-            // 1. Lance l'animation d'ouverture
+            // 1. Ouvre l'enveloppe
             document.body.classList.add('opened');
             
-            // 2. Lance la musique directement au clic
+            // 2. Démarre la chanson d'Ed Sheeran directement au clic
             const music = document.getElementById('music');
             music.play().then(() => {
-                // Affiche le bouton de contrôle si la musique démarre avec succès
                 document.getElementById('music-control').style.display = 'flex';
             }).catch(error => {
                 console.log("Lecture automatique bloquée par le navigateur :", error);
@@ -341,7 +338,7 @@
             }
         }
 
-        // Script du Compte à Rebours
+        // Système du Compte à rebours
         const timer = setInterval(function() {
             const now = new Date().getTime();
             const distance = weddingDate - now;
@@ -349,4 +346,4 @@
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-Normally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.
+            const secondsNormally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.
