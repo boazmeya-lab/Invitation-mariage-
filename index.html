@@ -24,8 +24,8 @@
             overflow-x: hidden;
         }
 
-        /* Enveloppe plein écran */
-        #envelope-container {
+        /* Conteneur de l'intro vidéo */
+        #intro-container {
             position: fixed;
             top: 0;
             left: 0;
@@ -36,56 +36,31 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            transition: transform 1s cubic-bezier(0.85, 0, 0.15, 1), opacity 1s ease;
-        }
-
-        .envelope {
-            width: 90%;
-            max-width: 400px;
-            height: 60%;
-            max-height: 550px;
-            background: #e6ccb2;
-            border-radius: 12px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
             cursor: pointer;
-            border: 2px solid #ddb892;
+            transition: opacity 0.8s ease;
         }
 
-        .envelope::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        /* La vidéo prend tout l'écran */
+        #intro-video {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.03) 50%),
-                        linear-gradient(225deg, transparent 50%, rgba(0,0,0,0.03) 50%);
-            border-radius: 12px;
-            pointer-events: none;
+            object-fit: cover; /* Permet de remplir l'écran du téléphone proprement */
         }
 
-        /* Cachet de cire */
-        #seal {
-            width: 90px;
-            height: 90px;
-            background: #e5989b;
-            border-radius: 50%;
-            border: 4px solid #fff;
-            box-shadow: 0 8px 20px rgba(229, 152, 155, 0.4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        /* Bouton "Ouvrir" temporaire par-dessus la vidéo au début */
+        #open-overlay {
+            position: absolute;
+            z-index: 1010;
+            background: rgba(229, 152, 155, 0.9);
             color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            text-transform: uppercase;
             letter-spacing: 1px;
-            z-index: 10;
+            pointer-events: none; /* Laisse le clic traverser vers le conteneur */
             animation: pulse 2s infinite;
         }
 
@@ -95,16 +70,8 @@
             100% { transform: scale(1); }
         }
 
-        .click-text {
-            margin-top: 20px;
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            color: #7f5539;
-            font-size: 1.1rem;
-        }
-
-        .opened #envelope-container {
-            transform: translateY(-100%);
+        /* Cacher l'intro */
+        .intro-hidden #intro-container {
             opacity: 0;
             pointer-events: none;
         }
@@ -121,7 +88,7 @@
             display: none;
         }
 
-        .opened #card-container {
+        .intro-hidden #card-container {
             display: block;
             opacity: 1;
             transform: translateY(0);
@@ -245,15 +212,16 @@
 </head>
 <body>
 
-    <!-- ENVELOPPE GÉANTE -->
-    <div id="envelope-container" onclick="openInvitation()">
-        <div class="envelope">
-            <div id="seal">S & C</div>
-            <p class="click-text">Cliquez pour ouvrir</p>
-        </div>
+    <!-- INTRO VIDÉO DE L'ENVELOPPE -->
+    <div id="intro-container" onclick="startExperience()">
+        <div id="open-overlay">Ouvrir l'invitation</div>
+        <!-- La vidéo affiche le premier plan sans boucler au départ -->
+        <video id="intro-video" playsinline muted>
+            <source src="ouverture.mp4" type="video/mp4">
+        </video>
     </div>
 
-    <!-- FAIRE-PART -->
+    <!-- LE FAIRE-PART DE MARIAGE -->
     <div id="card-container">
         <div class="card">
             <h1>S & C</h1>
@@ -275,42 +243,61 @@
                 </div>
             </div>
 
-            <!-- BOUTON RSVP (Mets ton lien Tally ici) -->
+            <!-- BOUTON RSVP (Pense à mettre ton lien Tally final) -->
             <a href="https://tally.so/r/ton-propre-lien" target="_blank" class="btn-rsvp">
                 Confirmer ma présence
             </a>
         </div>
     </div>
 
-    <!-- AUDIO -->
+    <!-- MUSIQUE -->
     <audio id="music" loop>
         <source src="Ed Sheeran - Perfect (Official Music Video).mp3" type="audio/mpeg">
     </audio>
 
+    <!-- BOUTON D'AUDIO FLOTTANT -->
     <div id="music-control" style="display: none;" onclick="toggleMusic()">
         🎵
     </div>
 
     <script>
-        // CONFIGURATION DE LA DATE (Année, Mois-1, Jour, Heure, Minute)
+        // CONFIGURATION DE LA DATE DU MARIAGE
         const weddingDate = new Date("June 20, 2027 15:00:00").getTime(); 
 
-        function openInvitation() {
-            document.body.classList.add('opened');
-            const music = document.getElementById('music');
+        const video = document.getElementById('intro-video');
+        const overlay = document.getElementById('open-overlay');
+        const music = document.getElementById('music');
+
+        function startExperience() {
+            // 1. Masquer le bouton "Ouvrir"
+            overlay.style.display = 'none';
+
+            // 2. Lancer la musique directement
             music.play().then(() => {
                 document.getElementById('music-control').style.display = 'flex';
-            }).catch(err => console.log("Bloqué :", err));
+            }).catch(err => console.log("Musique bloquée au départ :", err));
+
+            // 3. Jouer la vidéo de l'enveloppe
+            video.play();
+
+            // 4. Dès que la vidéo de l'enveloppe est finie, on affiche le faire-part
+            video.onended = function() {
+                document.body.classList.add('intro-hidden');
+            };
         }
 
         function toggleMusic() {
-            const music = document.getElementById('music');
             const ctrl = document.getElementById('music-control');
-            if (music.paused) { music.play(); ctrl.innerHTML = "🎵"; }
-            else { music.pause(); ctrl.innerHTML = "🔇"; }
+            if (music.paused) {
+                music.play();
+                ctrl.innerHTML = "🎵";
+            } else {
+                music.pause();
+                ctrl.innerHTML = "🔇";
+            }
         }
 
-        // Compte à rebours sécurisé sans risque de coupure de code
+        // Script du Compte à rebours
         setInterval(function() {
             const diff = weddingDate - new Date().getTime();
             if (diff < 0) return;
