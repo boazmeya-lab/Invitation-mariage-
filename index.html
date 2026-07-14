@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -5,44 +6,347 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notre Mariage</title>
     <style>
-        body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #fdf6f0; font-family: 'Georgia', serif; }
-        
-        /* L'enveloppe */
-        #envelope { width: 300px; height: 200px; background: #d4a373; position: relative; cursor: pointer; transition: 0.5s; border-radius: 5px; display: flex; justify-content: center; align-items: center; }
-        #seal { width: 60px; height: 60px; background: #e5989b; border-radius: 50%; border: 3px solid #fff; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; }
-        
-        /* L'invitation cachée */
-        #card { display: none; width: 80%; padding: 20px; background: white; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        
-        /* Animation ouverture */
-        .opened #envelope { display: none; }
-        .opened #card { display: block; animation: fadeIn 1s; }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        /* Importation de polices élégantes */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:wght@300;400;600&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #fdf6f0;
+            font-family: 'Montserrat', sans-serif;
+            color: #4a3f35;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Enveloppe plein écran */
+        #envelope-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f4eae1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: transform 1s cubic-bezier(0.85, 0, 0.15, 1), opacity 1s ease;
+        }
+
+        .envelope {
+            width: 90%;
+            max-width: 400px;
+            height: 60%;
+            max-height: 550px;
+            background: #e6ccb2;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            border: 2px solid #ddb892;
+        }
+
+        /* Lignes de l'enveloppe pour l'effet réaliste */
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.03) 50%),
+                        linear-gradient(225deg, transparent 50%, rgba(0,0,0,0.03) 50%);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        /* Cachet de cire interactif */
+        #seal {
+            width: 90px;
+            height: 90px;
+            background: #e5989b;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            box-shadow: 0 8px 20px rgba(229, 152, 155, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            z-index: 10;
+            transition: transform 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 8px 20px rgba(229, 152, 155, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 8px 30px rgba(229, 152, 155, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 8px 20px rgba(229, 152, 155, 0.4); }
+        }
+
+        .click-text {
+            margin-top: 20px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: #7f5539;
+            font-size: 1.1rem;
+        }
+
+        /* État quand l'enveloppe s'ouvre */
+        .opened #envelope-container {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Page de l'invitation (Faire-part) */
+        #card-container {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s ease 0.5s, transform 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s;
+            width: 100%;
+            max-width: 600px;
+            padding: 40px 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .opened #card-container {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            border: 1px solid #f4eae1;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: #b7b7a4;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.2rem;
+            color: #a5a58d;
+            margin-bottom: 30px;
+        }
+
+        .details {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #6b705c;
+            margin-bottom: 40px;
+        }
+
+        /* Style du Compte à rebours */
+        .countdown-container {
+            margin: 40px 0;
+        }
+
+        .countdown-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #7f5539;
+            letter-spacing: 1px;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .time-box {
+            background: #fddcd2;
+            padding: 12px 15px;
+            border-radius: 8px;
+            min-width: 65px;
+            box-shadow: 0 4px 10px rgba(253, 220, 210, 0.4);
+        }
+
+        .time-num {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #e5989b;
+        }
+
+        .time-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #b5838d;
+            letter-spacing: 1px;
+        }
+
+        /* Bouton de confirmation Tally */
+        .btn-rsvp {
+            display: inline-block;
+            background: #b7b7a4;
+            color: white;
+            text-decoration: none;
+            padding: 15px 35px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(183, 183, 164, 0.3);
+            margin-top: 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-rsvp:hover {
+            background: #a5a58d;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(183, 183, 164, 0.4);
+        }
+
+        /* Bouton Audio discret */
+        #music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border: 1px solid #ddd;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
     </style>
 </head>
 <body>
 
-    <div id="envelope" onclick="openInvitation()">
-        <div id="seal">S & C</div>
+    <!-- ÉCRAN DE L'ENVELOPPE PLEIN ÉCRAN -->
+    <div id="envelope-container" onclick="openInvitation()">
+        <div class="envelope">
+            <div id="seal">S & C</div>
+            <p class="click-text">Cliquez pour ouvrir</p>
+        </div>
     </div>
 
-    <div id="card">
-        <h1>S & C</h1>
-        <p>Nous avons la joie de vous inviter à notre mariage.</p>
-        <button onclick="playMusic()">Voir le programme</button>
-        <!-- Remplace l'URL ci-dessous par le lien de ton fichier audio si tu en as un -->
-        <audio id="music" src="Ed Sheeran - Perfect (Official Music Video).mp3"></audio>
-    
+    <!-- PAGE DU FAIRE-PART -->
+    <div id="card-container">
+        <div class="card">
+            <h1>S & C</h1>
+            <p class="subtitle">Se disent Oui</p>
+            
+            <p class="details">
+                Nous sommes heureux de vous inviter à célébrer notre union.<br>
+                Rejoignez-nous pour partager ce moment magique et inoubliable.
+            </p>
+
+            <!-- COMPTE À REBOURS -->
+            <div class="countdown-container">
+                <p class="countdown-title">Le grand jour approche...</p>
+                <div class="countdown">
+                    <div class="time-box">
+                        <span class="time-num" id="days">00</span>
+                        <span class="time-label">Jours</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="time-num" id="hours">00</span>
+                        <span class="time-label">Heures</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="time-num" id="minutes">00</span>
+                        <span class="time-label">Min</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="time-num" id="seconds">00</span>
+                        <span class="time-label">Sec</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOUTON RSVP (LIEN TALLY) -->
+            <!-- REMPLACE L'URL CI-DESSOUS PAR TON LIEN TALLY PERSONNEL -->
+            <a href="https://tally.so/r/votre-lien-tally" target="_blank" class="btn-rsvp">
+                Confirmer ma présence
+            </a>
+        </div>
+    </div>
+
+    <!-- LECTEUR AUDIO DISCRET -->
+    <audio id="music" loop>
+        <source src="Ed Sheeran - Perfect (Official Music Video).mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- BOUTON PLAY/PAUSE DISCRET -->
+    <div id="music-control" style="display: none;" onclick="toggleMusic()">
+        🎵
     </div>
 
     <script>
+        // Date cible du mariage pour le compte à rebours (À MODIFIER ICI)
+        // Format : Année, Mois (0 pour Janvier, 11 pour Décembre), Jour, Heure, Minute
+        const weddingDate = new Date(2027, 5, 20, 15, 0, 0).getTime(); 
+
         function openInvitation() {
+            // 1. Lance l'animation d'ouverture
             document.body.classList.add('opened');
+            
+            // 2. Lance la musique directement au clic
+            const music = document.getElementById('music');
+            music.play().then(() => {
+                // Affiche le bouton de contrôle si la musique démarre avec succès
+                document.getElementById('music-control').style.display = 'flex';
+            }).catch(error => {
+                console.log("Lecture automatique bloquée par le navigateur :", error);
+            });
         }
-        function playMusic() {
-            document.getElementById('music').play();
+
+        function toggleMusic() {
+            const music = document.getElementById('music');
+            const control = document.getElementById('music-control');
+            if (music.paused) {
+                music.play();
+                control.innerHTML = "🎵";
+            } else {
+                music.pause();
+                control.innerHTML = "🔇";
+            }
         }
-    </script>
-</body>
-</html>
+
+        // Script du Compte à Rebours
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+Normally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.
