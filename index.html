@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notre Mariage</title>
     <style>
-        /* Importation de polices élégantes */
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:wght@300;400;600&display=swap');
 
         * {
@@ -57,7 +56,6 @@
             border: 2px solid #ddb892;
         }
 
-        /* Effet de pliure réaliste */
         .envelope::before {
             content: '';
             position: absolute;
@@ -88,14 +86,13 @@
             font-weight: bold;
             letter-spacing: 1px;
             z-index: 10;
-            transition: transform 0.3s ease;
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 8px 20px rgba(229, 152, 155, 0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 8px 30px rgba(229, 152, 155, 0.6); }
-            100% { transform: scale(1); box-shadow: 0 8px 20px rgba(229, 152, 155, 0.4); }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
         .click-text {
@@ -106,7 +103,6 @@
             font-size: 1.1rem;
         }
 
-        /* Animation d'ouverture */
         .opened #envelope-container {
             transform: translateY(-100%);
             opacity: 0;
@@ -203,7 +199,7 @@
             letter-spacing: 1px;
         }
 
-        /* Bouton RSVP Tally */
+        /* Bouton RSVP */
         .btn-rsvp {
             display: inline-block;
             background: #b7b7a4;
@@ -228,7 +224,7 @@
             box-shadow: 0 12px 24px rgba(183, 183, 164, 0.4);
         }
 
-        /* Contrôle audio discret */
+        /* Contrôle audio */
         #music-control {
             position: fixed;
             bottom: 20px;
@@ -249,7 +245,7 @@
 </head>
 <body>
 
-    <!-- L'ENVELOPPE GÉANTE -->
+    <!-- ENVELOPPE GÉANTE -->
     <div id="envelope-container" onclick="openInvitation()">
         <div class="envelope">
             <div id="seal">S & C</div>
@@ -257,7 +253,7 @@
         </div>
     </div>
 
-    <!-- LE FAIRE-PART DE MARIAGE -->
+    <!-- FAIRE-PART -->
     <div id="card-container">
         <div class="card">
             <h1>S & C</h1>
@@ -272,78 +268,63 @@
             <div class="countdown-container">
                 <p class="countdown-title">Le grand jour approche...</p>
                 <div class="countdown">
-                    <div class="time-box">
-                        <span class="time-num" id="days">00</span>
-                        <span class="time-label">Jours</span>
-                    </div>
-                    <div class="time-box">
-                        <span class="time-num" id="hours">00</span>
-                        <span class="time-label">Heures</span>
-                    </div>
-                    <div class="time-box">
-                        <span class="time-num" id="minutes">00</span>
-                        <span class="time-label">Min</span>
-                    </div>
-                    <div class="time-box">
-                        <span class="time-num" id="seconds">00</span>
-                        <span class="time-label">Sec</span>
-                    </div>
+                    <div class="time-box"><span class="time-num" id="days">00</span><span class="time-label">Jours</span></div>
+                    <div class="time-box"><span class="time-num" id="hours">00</span><span class="time-label">Heures</span></div>
+                    <div class="time-box"><span class="time-num" id="minutes">00</span><span class="time-label">Min</span></div>
+                    <div class="time-box"><span class="time-num" id="seconds">00</span><span class="time-label">Sec</span></div>
                 </div>
             </div>
 
-            <!-- BOUTON RSVP (Remplacer l'URL par ton lien Tally) -->
+            <!-- BOUTON RSVP (Mets ton lien Tally ici) -->
             <a href="https://tally.so/r/ton-propre-lien" target="_blank" class="btn-rsvp">
                 Confirmer ma présence
             </a>
         </div>
     </div>
 
-    <!-- MUSIQUE (Pointe vers ton fichier audio sur GitHub) -->
+    <!-- AUDIO -->
     <audio id="music" loop>
         <source src="Ed Sheeran - Perfect (Official Music Video).mp3" type="audio/mpeg">
     </audio>
 
-    <!-- BOUTON D'AUDIO FLOTTANT -->
     <div id="music-control" style="display: none;" onclick="toggleMusic()">
         🎵
     </div>
 
     <script>
-        // --- CONFIGURATION DE LA DATE (Année, Mois-1, Jour, Heure, Minute) ---
-        // Note importante : Les mois commencent à 0 (0 = Janvier, 5 = Juin, 11 = Décembre)
-        const weddingDate = new Date(2027, 5, 20, 15, 0, 0).getTime(); 
+        // CONFIGURATION DE LA DATE (Année, Mois-1, Jour, Heure, Minute)
+        const weddingDate = new Date("June 20, 2027 15:00:00").getTime(); 
 
         function openInvitation() {
-            // 1. Ouvre l'enveloppe
             document.body.classList.add('opened');
-            
-            // 2. Démarre la chanson d'Ed Sheeran directement au clic
             const music = document.getElementById('music');
             music.play().then(() => {
                 document.getElementById('music-control').style.display = 'flex';
-            }).catch(error => {
-                console.log("Lecture automatique bloquée par le navigateur :", error);
-            });
+            }).catch(err => console.log("Bloqué :", err));
         }
 
         function toggleMusic() {
             const music = document.getElementById('music');
-            const control = document.getElementById('music-control');
-            if (music.paused) {
-                music.play();
-                control.innerHTML = "🎵";
-            } else {
-                music.pause();
-                control.innerHTML = "🔇";
-            }
+            const ctrl = document.getElementById('music-control');
+            if (music.paused) { music.play(); ctrl.innerHTML = "🎵"; }
+            else { music.pause(); ctrl.innerHTML = "🔇"; }
         }
 
-        // Système du Compte à rebours
-        const timer = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = weddingDate - now;
+        // Compte à rebours sécurisé sans risque de coupure de code
+        setInterval(function() {
+            const diff = weddingDate - new Date().getTime();
+            if (diff < 0) return;
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const secondsNormally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.
+            const d = Math.floor(diff / 86400000);
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+
+            document.getElementById("days").innerHTML = d;
+            document.getElementById("hours").innerHTML = h;
+            document.getElementById("minutes").innerHTML = m;
+            document.getElementById("seconds").innerHTML = s;
+        }, 1000);
+    </script>
+</body>
+</html>
